@@ -1,0 +1,18 @@
+{
+  "name": "hello_world",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/mod.ts",
+  "scripts": {
+    "bundle": "cd dist && find . -name '*.lua' | grep -v test | paste -sd \" \" - | xargs luapak merge -o ../mod.lua",
+    "compile": "tstl -p tsconfig.json && npm run bundle",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ava": "1.0.0-beta.5.1",
+    "typescript": "3.2.1",
+    "typescript-to-lua": "0.11.1"
+  }
+}
