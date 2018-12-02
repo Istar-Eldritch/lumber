@@ -1,5 +1,3 @@
-import {helper} from './internal/one';
-
 const MOD_NAME = 'lumber';
 
 const LOG_PILE = `${MOD_NAME}:log_pile`;

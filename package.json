@@ -4,8 +4,7 @@
   "description": "",
   "main": "src/mod.ts",
   "scripts": {
-    "bundle": "cd dist && find . -name '*.lua' | grep -v test | paste -sd \" \" - | xargs luapak merge -o ../mod.lua",
-    "compile": "tstl -p tsconfig.json && npm run bundle",
+    "compile": "tstl -p tsconfig.json && cp dist/mod.lua mod.lua",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
