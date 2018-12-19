@@ -74,7 +74,7 @@ export function setup(context: any, state: ModSettings): void {
       fixed: boxes,
     },
     tiles: [
-      'lumber_log-side.png', 'lumber_log-side.png', // top - bottom
+      'lumber_log-top.png', 'lumber_log-bottom.png', // top - bottom
       'lumber_log-front.png', 'lumber_log-front.png', // front - back
       'lumber_log-side.png', 'lumber_log-side.png', // sides
     ],
