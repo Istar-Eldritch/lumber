@@ -1,20 +1,25 @@
 
 declare global {
-  interface ModSettings {
-    mod_name: string;
+  interface ModState {
+    name: string;
     mod_path: string;
+    load: <T>(module: string) => T;
   }
 
   interface ModModule {
-    setup(state: ModSettings): void;
+    setup: (state: ModState) => void;
   }
 }
 
-const mod_name = 'lumber';
-const mod_path = minetest.get_modpath(mod_name);
+const name = 'lumber';
+const mod_path = minetest.get_modpath(name);
 
-export const mod_settings = {mod_name, mod_path};
+function load<T>(module: string): T {
+  return dofile<T>(`${mod_path}/dist/${module}`);
+}
 
-const logPile = dofile<ModModule>(`${mod_path}/dist/log-pile.lua`);
+export const mod_state = {name, mod_path, load};
 
-logPile.setup(mod_settings);
+const logPile = load<ModModule>(`log-pile.lua`);
+
+logPile.setup(mod_state);

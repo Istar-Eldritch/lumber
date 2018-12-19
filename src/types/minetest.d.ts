@@ -21,7 +21,7 @@ declare namespace minetest {
    *  ```
    */
   /* tslint:enable */
-  function add_entity(pos: Position, name: string, data: LuaEntityProperties): ObjectRef | null;
+  function add_entity(pos: Vector3D, name: string, data: LuaEntityProperties): ObjectRef | null;
 
   /* tslint:disable */
   /**

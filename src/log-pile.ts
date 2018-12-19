@@ -45,28 +45,20 @@ function boxes_for_log(position: number): Box[] {
   ];
 }
 
-export function setup(context: any, state: ModSettings): void {
-  const array_utils = dofile<ArrayUtils>(`${state.mod_path}/dist/utils/arrays.lua`);
-  const boxes = array_utils.merge(
-    boxes_for_log(0),
-    boxes_for_log(1),
-    boxes_for_log(2),
-    boxes_for_log(3),
-    boxes_for_log(4),
-    boxes_for_log(5),
-    boxes_for_log(6),
-    boxes_for_log(7),
-    boxes_for_log(8),
-    boxes_for_log(9),
-    boxes_for_log(10),
-    boxes_for_log(11),
-    boxes_for_log(12),
-    boxes_for_log(13),
-    boxes_for_log(14),
-    boxes_for_log(15),
+export function setup(mod: ModState): void {
+  const array = mod.load<ArrayModule>(`utils/arrays.lua`);
+  const range = mod.load<RangeModule>(`utils/range.lua`).setup(mod.load);
+  const iter = mod.load<IterModule>(`utils/iter.lua`);
+
+  const boxes: Box[] = iter.fold(
+    iter.map(range.range(0, 16), boxes_for_log),
+    [],
+    (acc: Box[], next: Box[]) => {
+      return array.merge(acc, next);
+    },
   );
 
-  minetest.register_node(`${state.mod_name}:log_pile`, {
+  minetest.register_node(`${mod.name}:log_pile`, {
     drawtype: 'nodebox',
     diggable: true,
     node_box: {
