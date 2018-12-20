@@ -12,6 +12,7 @@
     "only-arrow-functions": [ "off" ],
     "interface-name": [ "error", "interface-name" ],
     "no-empty-interface": [ "off" ],
-    "no-namespace": false
+    "no-namespace": false,
+    "no-string-throw": false
   }
 }
