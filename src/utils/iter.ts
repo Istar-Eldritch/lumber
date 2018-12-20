@@ -9,6 +9,8 @@ declare global {
     map: <T, O>(i: Iter<T>, f: (v: T) => O) => Iter<O>;
     filter: <T>(i: Iter<T>, f: (v: T) => boolean) => Iter<T>;
     fold: <T, O>(i: Iter<T>, init: O,  f: (acc: O, v: T) => O) => O;
+    for_each: <T>(i: Iter<T>, f: (v: T) => void) => void;
+
   }
 }
 
@@ -51,4 +53,15 @@ export function fold<T, O>(i: Iter<T>, init: O,  f: (acc: O, v: T) => O): O {
     }
   }
   return acc;
+}
+
+export function for_each<T>(i: Iter<T>, f: (v: T) => void): void {
+  while (true) {
+    const next = i.next();
+    if (next.is_some()) {
+      f(next.unwrap());
+    } else {
+      break;
+    }
+  }
 }
