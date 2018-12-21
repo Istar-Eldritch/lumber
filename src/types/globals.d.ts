@@ -32,6 +32,8 @@ declare global {
   function debug(...args: any[]): void;
 
   function print(...args: any[]): void;
+
+  function tonumber(s: string): number;
 }
 
 export {};

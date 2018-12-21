@@ -1640,7 +1640,7 @@ declare namespace minetest {
    *  TODO: Add type definitions
    */
   /* tslint:enable */
-  function get_node(...args: any[]): any;
+  function get_node(pos: Vector3D): Node;
 
   /* tslint:disable */
   /**
@@ -3438,7 +3438,7 @@ declare namespace minetest {
    *  TODO: Add type definitions
    */
   /* tslint:enable */
-  function register_craftitem(...args: any[]): any;
+  function register_craftitem(name: string, definition: ItemDefinition): any;
 
   /* tslint:disable */
   /**
@@ -4500,10 +4500,9 @@ netest.set_mapgen_params(mapgen_params)
    *  ```pseudocode
    *  minetest.set_node(pos, node)
    *  ```
-   *  TODO: Add type definitions
    */
   /* tslint:enable */
-  function set_node(...args: any[]): any;
+  function set_node(pos: Vector3D, definition: {name: string}): void;
 
   /* tslint:disable */
   /**
@@ -5023,7 +5022,7 @@ netest.set_mapgen_params(mapgen_params)
     on_place?: (item: ItemStack, placer: ObjectRef, pos: Vector3D, pointedthing: PointedThing) => void;
     on_drop?: (item: ItemStack, dropper: ObjectRef, pos: Vector3D) => void;
     on_use?: (item: ItemStack, player: ObjectRef, pointedthing: PointedThing) => void;
-    on_punch?: (item: ItemStack, node: Node, player: ObjectRef, pointedthing: PointedThing) => void;
+    on_punch?: (pos: Vector3D, node: Node, player: ObjectRef, pointedthing: PointedThing) => void;
     on_dig?: (pos: Vector3D, node: Node, player: ObjectRef) => void;
     on_timer?: (pos: Vector3D, elapsed: number) => void;
     on_receive_fields?: (pos: Vector3D, formname: any, fields: {[k: string]: any}, sender: PlayerObject) => void;
@@ -5307,5 +5306,26 @@ netest.set_mapgen_params(mapgen_params)
     vertical: boolean;
     texture: string;
     playername?: string;
+  }
+
+  export interface ItemDefinition {
+    description?: string;
+    groups?: {[k: string]: number};
+    inventory_image?: string;
+    wield_image?: string;
+    wield_scale?: Vector3D;
+    stack_max?: number;
+    liquids_pointable?: boolean;
+    metadata?: any;
+
+    on_place?: (item: ItemStack, placer: ObjectRef, pointed_thing: PointedThing) => void | ItemStack;
+    on_drop?: (item: ItemStack, placer: ObjectRef, position: Vector3D) => void | ItemStack;
+    on_use?: (item: ItemStack, placer: ObjectRef, pointed_thing: PointedThing) => void | ItemStack;
+  }
+
+  export interface Node {
+    name: string;
+    param1: any;
+    param2: any;
   }
 }

@@ -61,19 +61,42 @@ export function setup(mod: ModState): void {
       },
     );
 
-    minetest.register_node(`${mod.name}:log_pile_${n}`, {
+    minetest.register_node(`${mod.name}:log_${n}`, {
+      stack_max: 16,
       drawtype: 'nodebox',
       diggable: true,
       node_box: {
         type: 'fixed',
         fixed: boxes,
       },
+      inventory_image: 'log-inventory.png',
+      wield_image: 'log-wield.png',
       tiles: [
         'lumber_log-top.png', 'lumber_log-bottom.png', // top - bottom
         'lumber_log-front.png', 'lumber_log-front.png', // front - back
         'lumber_log-side.png', 'lumber_log-side.png', // sides
       ],
+      on_punch: (pos, node, player) => {
+        const inventory = player.get_inventory();
+        const item = `${mod.name}:log_1`;
+        if (inventory.room_for_item('main', item)) {
+          const result = inventory.add_item('main', item);
+          if (n > 1) {
+            minetest.set_node(pos, {name: `${mod.name}:log_${n - 1}`});
+          } else {
+            minetest.set_node(pos, {name: 'air'});
+          }
+        }
+      },
+      on_rightclick: (pos, node, player, stack, pointed_thing) => {
+        if (stack.get_name() === `${mod.name}:log_1` && n < 16) {
+          minetest.set_node(pos, {name: `${mod.name}:log_${n + 1}`});
+          stack.set_count(stack.get_count() - 1);
+          return stack;
+        } else {
+          return minetest.item_place_node(stack, player, pointed_thing);
+        }
+      },
     });
-  })
-  //
+  });
 }
