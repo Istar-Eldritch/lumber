@@ -47,23 +47,66 @@ function boxes_for_log(position: number): Box[] {
   ];
 }
 
-export function setup(mod: ModState): void {
+function get_log_from_pile(mod_name: string, log_count: number, _mt = minetest ) {
+  return (
+    pos: minetest.Vector3D,
+    node: minetest.Node,
+    player: minetest.ObjectRef,
+  ) => {
+    const inventory = player.get_inventory();
+    const item = `${mod_name}:log_1`;
+    if (inventory.room_for_item('main', item)) {
+      const result = inventory.add_item('main', item);
+      if (log_count > 1) {
+        _mt.set_node(pos, {
+          name: `${mod_name}:log_${log_count - 1}`,
+        });
+      } else {
+        _mt.set_node(pos, {name: 'air'});
+      }
+    }
+  };
+}
+
+function add_logs_to_pile(mod_name: string, log_count: number, _mt = minetest) {
+  return (
+    pos: minetest.Vector3D,
+    node: minetest.Node,
+    player: minetest.ObjectRef,
+    stack: minetest.ItemStack,
+    pointed_thing: minetest.PointedThing,
+  ) => {
+    if (stack.get_name() === `${mod_name}:log_1` && log_count < 16) {
+      _mt.set_node(pos, {
+        name: `${mod_name}:log_${log_count + 1}`,
+      });
+      stack.set_count(stack.get_count() - 1);
+      return stack;
+    } else {
+      return _mt.item_place_node(stack, player, pointed_thing);
+    }
+  };
+}
+
+export function setup(mod: ModState, _mt = minetest): void {
   const array = mod.load<ArrayModule>(`utils/arrays.lua`);
   const range = mod.load<RangeModule>(`utils/range.lua`).setup(mod.load);
   const iter = mod.load<IterModule>(`utils/iter.lua`);
 
-  iter.for_each(range.range(1, 17), (n) => {
+  iter.for_each(range.range(1, 17), (log_count) => {
     const boxes: Box[] = iter.fold(
-      iter.map(range.range(0, n), boxes_for_log),
+      iter.map(range.range(0, log_count), boxes_for_log),
       [],
       (acc: Box[], next: Box[]) => {
         return array.merge(acc, next);
       },
     );
 
-    minetest.register_node(`${mod.name}:log_${n}`, {
+    _mt.register_node(`${mod.name}:log_${log_count}`, {
       stack_max: 16,
+      description: 'Log',
       drawtype: 'nodebox',
+      paramtype: 'light',
       diggable: true,
       node_box: {
         type: 'fixed',
@@ -76,27 +119,8 @@ export function setup(mod: ModState): void {
         'lumber_log-front.png', 'lumber_log-front.png', // front - back
         'lumber_log-side.png', 'lumber_log-side.png', // sides
       ],
-      on_punch: (pos, node, player) => {
-        const inventory = player.get_inventory();
-        const item = `${mod.name}:log_1`;
-        if (inventory.room_for_item('main', item)) {
-          const result = inventory.add_item('main', item);
-          if (n > 1) {
-            minetest.set_node(pos, {name: `${mod.name}:log_${n - 1}`});
-          } else {
-            minetest.set_node(pos, {name: 'air'});
-          }
-        }
-      },
-      on_rightclick: (pos, node, player, stack, pointed_thing) => {
-        if (stack.get_name() === `${mod.name}:log_1` && n < 16) {
-          minetest.set_node(pos, {name: `${mod.name}:log_${n + 1}`});
-          stack.set_count(stack.get_count() - 1);
-          return stack;
-        } else {
-          return minetest.item_place_node(stack, player, pointed_thing);
-        }
-      },
+      on_punch: get_log_from_pile(mod.name, log_count),
+      on_rightclick: add_logs_to_pile(mod.name, log_count),
     });
   });
 }
