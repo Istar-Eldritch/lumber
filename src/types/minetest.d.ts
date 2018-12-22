@@ -4502,7 +4502,7 @@ netest.set_mapgen_params(mapgen_params)
    *  ```
    */
   /* tslint:enable */
-  function set_node(pos: Vector3D, definition: {name: string}): void;
+  function set_node(pos: Vector3D, node: Node): void;
 
   /* tslint:disable */
   /**
@@ -4981,6 +4981,7 @@ netest.set_mapgen_params(mapgen_params)
   export type PlayerObject = ObjectRef;
 
   export interface NodeDefinition {
+    description?: string;
     drawtype: DrawType;
     visual_scale?: number;
     tiles: string | [string, string, string, string, string, string];
@@ -5022,7 +5023,7 @@ netest.set_mapgen_params(mapgen_params)
     on_place?: (item: ItemStack, placer: ObjectRef, pos: Vector3D, pointedthing: PointedThing) => void;
     on_drop?: (item: ItemStack, dropper: ObjectRef, pos: Vector3D) => void;
     on_use?: (item: ItemStack, player: ObjectRef, pointedthing: PointedThing) => void;
-    on_punch?: (pos: Vector3D, node: Node, player: ObjectRef, pointedthing: PointedThing) => void;
+    on_punch?: (pos: Vector3D, node: Node, player: Player, pointedthing: PointedThing) => void;
     on_dig?: (pos: Vector3D, node: Node, player: ObjectRef) => void;
     on_timer?: (pos: Vector3D, elapsed: number) => void;
     on_receive_fields?: (pos: Vector3D, formname: any, fields: {[k: string]: any}, sender: PlayerObject) => void;
@@ -5058,8 +5059,8 @@ netest.set_mapgen_params(mapgen_params)
 
   export interface Node {
     name: string;
-    param1: any;
-    param2: any;
+    param1?: any;
+    param2?: any;
   }
 
   export type PointedThing = PointedObject | PointedNothing | PointedNode;
@@ -5179,6 +5180,89 @@ netest.set_mapgen_params(mapgen_params)
   export interface Vector2D {
     x: number;
     y: number;
+  }
+
+  export interface Player extends ObjectRef {
+    is_player(): boolean;
+    is_player_connected(name: string): boolean;
+    get_player_name(): string;
+    get_attribute(attribute: string): string | null;
+    set_attribute(attribute: string, value: string | number | null): void;
+    get_look_dir(): Vector3D;
+    get_look_vertical(): number;
+    set_look_vertical(radians: number): void;
+    get_look_horizontal(): number;
+    set_look_horizontal(radians: number): void;
+    get_player_control(): any;
+    get_player_control_bits(): any;
+    get_breath(): number;
+    set_breath(value: number): void;
+    get_physics_override(): PhysicsValues;
+    set_physics_override(physics: PhysicsValues): void;
+    get_player_velocity(): Vector3D;
+    get_inventory_formspec(): string;
+    set_inventory_formspec(spec: string): void;
+
+    hud_add(definition: HUDDefinition): void;
+    hud_change(id: string, stat: string, value: any): void;
+    hud_remove(id: string): void;
+    hud_get(id: string): HUDDefinition;
+    hud_set_flags(flags: {[k: string]: boolean}): void;
+    hud_get_flags(): {[k: string]: boolean};
+    hud_get_hotbar_itemcount(): number;
+    hud_set_hotbar_itemcount(n: number): void;
+  }
+
+  export type HUDDefinition = ImageHUD | TextHUD | StatBar;
+
+  export interface ImageHUD {
+    hud_elem_type: 'image';
+    scale: number;
+    text: string;
+    alignment: Vector2D;
+    offset: Vector2D;
+  }
+
+  export interface TextHUD {
+    hud_elem_type: 'text';
+    scale: number;
+    text: string;
+    number: number;
+    alignment: Vector2D;
+    offset: Vector2D;
+  }
+
+  export interface StatBar {
+    hud_elem_type: 'statbar';
+    text: string;
+    number: number;
+    direction?: Vector2D;
+    offset: Vector2D;
+    size?: string;
+  }
+
+  export interface InventoryHUD {
+    hud_elem_type: 'inventory';
+    text: string;
+    number: number;
+    item: number;
+    direction?: Vector2D;
+  }
+
+  export interface WaypointHUD {
+    hud_elem_type: 'waypoint';
+    name: string;
+    text: string;
+    number: number;
+    world_pos: Vector3D;
+  }
+
+  export interface PhysicsValues {
+    speed?: number;
+    jump?: number;
+    gravity?: number;
+    sneak?: boolean;
+    sneak_glitch?: boolean;
   }
 
   export interface ObjectRef {
@@ -5321,11 +5405,5 @@ netest.set_mapgen_params(mapgen_params)
     on_place?: (item: ItemStack, placer: ObjectRef, pointed_thing: PointedThing) => void | ItemStack;
     on_drop?: (item: ItemStack, placer: ObjectRef, position: Vector3D) => void | ItemStack;
     on_use?: (item: ItemStack, placer: ObjectRef, pointed_thing: PointedThing) => void | ItemStack;
-  }
-
-  export interface Node {
-    name: string;
-    param1: any;
-    param2: any;
   }
 }
