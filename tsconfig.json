@@ -16,8 +16,11 @@
     "rootDir": "src",
     "outDir": "dist"
   },
-  "luaTarget": "5.1",
-  "luaLibImport": "none",
+  "tstl": {
+    "luaTarget": "5.1",
+    "luaBundle": "init.lua",
+    "luaBundleEntry": "src/mod.ts"
+  },
   "exclude": ["node_modules", "dist"],
   "compileOnSave": false,
   "buildOnSave": false

@@ -1,3 +1,4 @@
+/** @noSelf **/
 declare namespace vector {
   type Vector = minetest.Vector3D;
   function direction(p1: Vector, p2: Vector): Vector;

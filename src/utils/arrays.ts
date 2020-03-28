@@ -1,11 +1,3 @@
-
-declare global {
-  interface ArrayModule {
-    reduce: <T, O>(arr: T[], acc: O, f: (acc: O, next: T) => O) => O;
-    merge: <T>(...args: T[][]) => T[];
-  }
-}
-
 export function reduce<T, O>(arr: T[], acc: O, f: (acc: O, next: T) => O): O {
   let _acc = acc;
   for (const item of arr) {

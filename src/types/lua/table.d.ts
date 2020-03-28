@@ -1,3 +1,4 @@
+/** @noSelf **/
 declare namespace table {
   function insert<T>(list: T[], value: T): void;
   function insert<T>(list: T[], position: number, value: T): void;

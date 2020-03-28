@@ -1,4 +1,6 @@
-
+import { merge, reduce } from "./utils/arrays";
+import * as Iter from "./utils/iter";
+import {range} from "./utils/range";
 const pixel = 0.0313;
 
 type Box = minetest.Box;
@@ -47,7 +49,13 @@ function boxes_for_log(position: number): Box[] {
   ];
 }
 
-function get_log_from_pile(mod_name: string, log_count: number, _mt = minetest ) {
+type OnPunchCallback = (
+  this: void,
+  pos: minetest.Vector3D,
+  node: minetest.Node,
+  player: minetest.ObjectRef,
+) => void;
+function get_log_from_pile(mod_name: string, log_count: number, _mt = minetest ): OnPunchCallback  {
   return (
     pos: minetest.Vector3D,
     node: minetest.Node,
@@ -68,7 +76,16 @@ function get_log_from_pile(mod_name: string, log_count: number, _mt = minetest )
   };
 }
 
-function add_logs_to_pile(mod_name: string, log_count: number, _mt = minetest) {
+type OnRightClickCallback = (
+  this: void,
+  pos: minetest.Vector3D,
+  node: minetest.Node,
+  player: minetest.ObjectRef,
+  stack: minetest.ItemStack,
+  pointed_thing: minetest.PointedThing,
+) => void;
+
+function add_logs_to_pile(mod_name: string, log_count: number, _mt = minetest): OnRightClickCallback {
   return (
     pos: minetest.Vector3D,
     node: minetest.Node,
@@ -88,17 +105,19 @@ function add_logs_to_pile(mod_name: string, log_count: number, _mt = minetest) {
   };
 }
 
-export function setup(mod: ModState, _mt = minetest): void {
-  const array = mod.load<ArrayModule>(`utils/arrays.lua`);
-  const range = mod.load<RangeModule>(`utils/range.lua`).setup(mod.load);
-  const iter = mod.load<IterModule>(`utils/iter.lua`);
+export interface ModState {
+  name: string,
+  mod_path: string
+}
 
-  iter.for_each(range.range(1, 17), (log_count) => {
-    const boxes: Box[] = iter.fold(
-      iter.map(range.range(0, log_count), boxes_for_log),
+export function setup(mod: ModState, _mt = minetest): void {
+
+  Iter.for_each(range(1, 17), (log_count) => {
+    const boxes: Box[] = Iter.fold(
+      Iter.map(range(0, log_count), boxes_for_log),
       [],
       (acc: Box[], next: Box[]) => {
-        return array.merge(acc, next);
+        return merge(acc, next);
       },
     );
 

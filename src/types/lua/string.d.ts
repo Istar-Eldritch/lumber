@@ -1,3 +1,4 @@
+/** @noSelf **/
 declare namespace string {
 
   /** @tupleReturn */

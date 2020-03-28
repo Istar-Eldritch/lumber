@@ -1,17 +1,10 @@
 
-declare global {
-  interface Option<T> {
-    map: <O> (f: (t: T) => O) => Option<O>;
-    or_else: (f: () => Option<T>) => Option<T>;
-    unwrap: () => T;
-    unwrap_or_else: (value: T) => T;
-    is_some: () => boolean;
-  }
-
-  interface OptionModule {
-    Some: <T> (value: T) => Option<T>;
-    None: <T> () => Option<T>;
-  }
+export interface Option<T> {
+  map: <O> (f: (t: T) => O) => Option<O>;
+  or_else: (f: () => Option<T>) => Option<T>;
+  unwrap: () => T;
+  unwrap_or_else: (value: T) => T;
+  is_some: () => boolean;
 }
 
 export function Some<T>(value: T): Option<T> {

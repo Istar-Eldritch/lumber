@@ -1,3 +1,4 @@
+/** @noSelf **/
 declare namespace math {
   function abs(n: number): number;
 

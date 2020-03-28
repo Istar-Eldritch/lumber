@@ -1,17 +1,7 @@
+import { Option } from "./option";
 
-declare global {
-
-  interface Iter<T> {
-    next: () => Option<T>;
-  }
-
-  interface IterModule {
-    map: <T, O>(i: Iter<T>, f: (v: T) => O) => Iter<O>;
-    filter: <T>(i: Iter<T>, f: (v: T) => boolean) => Iter<T>;
-    fold: <T, O>(i: Iter<T>, init: O,  f: (acc: O, v: T) => O) => O;
-    for_each: <T>(i: Iter<T>, f: (v: T) => void) => void;
-
-  }
+export interface Iter<T> {
+  next: () => Option<T>;
 }
 
 export function map<T, O>(i: Iter<T>, f: (v: T) => O): Iter<O> {

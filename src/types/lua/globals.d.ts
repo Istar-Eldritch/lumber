@@ -1,3 +1,4 @@
+/** @noSelf **/
 declare global {
   /**
    *  Helper function which dumps a human-readable version of a value.

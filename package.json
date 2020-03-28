@@ -4,14 +4,16 @@
   "description": "",
   "main": "src/mod.ts",
   "scripts": {
-    "compile": "tstl -p tsconfig.json && cp dist/mod.lua mod.lua",
+    "compile": "tstl -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "ava": "1.0.0-beta.5.1",
-    "typescript": "3.2.1",
-    "typescript-to-lua": "0.12.2"
+    "typescript-to-lua": "0.32.0"
+  },
+  "dependencies": {
+    "typescript": "3.8.3"
   }
 }

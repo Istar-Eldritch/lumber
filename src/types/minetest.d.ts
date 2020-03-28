@@ -1,3 +1,4 @@
+/** @noSelf **/
 declare namespace minetest {
 
   /* tslint:disable */
@@ -5017,44 +5018,44 @@ netest.set_mapgen_params(mapgen_params)
       dig?: SimpleSoundSpec;
       dug?: SimpleSoundSpec;
     };
-    on_construct?: (pos: Vector3D) => void;
-    on_destruct?: (pos: Vector3D) => void;
-    after_destruct?: (pos: Vector3D, oldnode: Node) => void;
-    on_place?: (item: ItemStack, placer: ObjectRef, pos: Vector3D, pointedthing: PointedThing) => void;
-    on_drop?: (item: ItemStack, dropper: ObjectRef, pos: Vector3D) => void;
-    on_use?: (item: ItemStack, player: ObjectRef, pointedthing: PointedThing) => void;
-    on_punch?: (pos: Vector3D, node: Node, player: Player, pointedthing: PointedThing) => void;
-    on_dig?: (pos: Vector3D, node: Node, player: ObjectRef) => void;
-    on_timer?: (pos: Vector3D, elapsed: number) => void;
-    on_receive_fields?: (pos: Vector3D, formname: any, fields: {[k: string]: any}, sender: PlayerObject) => void;
+    on_construct?: (this: void, pos: Vector3D) => void;
+    on_destruct?: (this: void, pos: Vector3D) => void;
+    after_destruct?: (this: void, pos: Vector3D, oldnode: Node) => void;
+    on_place?: (this: void, item: ItemStack, placer: ObjectRef, pos: Vector3D, pointedthing: PointedThing) => void;
+    on_drop?: (this: void, item: ItemStack, dropper: ObjectRef, pos: Vector3D) => void;
+    on_use?: (this: void, item: ItemStack, player: ObjectRef, pointedthing: PointedThing) => void;
+    on_punch?: (this:void, pos: Vector3D, node: Node, player: Player, pointedthing: PointedThing) => void;
+    on_dig?: (this: void, pos: Vector3D, node: Node, player: ObjectRef) => void;
+    on_timer?: (this: void, pos: Vector3D, elapsed: number) => void;
+    on_receive_fields?: (this: void, pos: Vector3D, formname: any, fields: {[k: string]: any}, sender: PlayerObject) => void;
     allow_metadata_inventory_move?: (
-      pos: Vector3D, from_list: string, from_index: number, to_list: string,
+      this: void, pos: Vector3D, from_list: string, from_index: number, to_list: string,
       to_index: number, count: number, player: PlayerObject,
     ) => void;
     allow_metadata_inventory_put?: (
-      pos: Vector3D, listname: string, index: number,
+      this: void, pos: Vector3D, listname: string, index: number,
       stack: ItemStack, player: PlayerObject,
     ) => void;
     allow_metadta_inventory_take?: (
-      pos: Vector3D, listname: string, index: number, stack: ItemStack, player: PlayerObject,
+      this: void, pos: Vector3D, listname: string, index: number, stack: ItemStack, player: PlayerObject,
     ) => void;
     on_metadata_inventory_move?: (
-      pos: Vector3D, from_list: string, from_index: number, to_list: string,
+      this: void, pos: Vector3D, from_list: string, from_index: number, to_list: string,
       to_index: number, count: number, player: PlayerObject,
     ) => void;
     on_metadata_inventory_put?: (
-      pos: Vector3D, listname: string, index: number, stack: ItemStack, player: PlayerObject,
+      this: void, pos: Vector3D, listname: string, index: number, stack: ItemStack, player: PlayerObject,
     ) => void;
     on_metadta_inventory_take?: (
-      pos: Vector3D, listname: string, index: number, stack: ItemStack, player: PlayerObject,
+      this: void, pos: Vector3D, listname: string, index: number, stack: ItemStack, player: PlayerObject,
     ) => void;
 
-    after_place_node?: (pos: Vector3D, placer: ObjectRef, item: ItemStack, pointedthing: PointedThing) => void;
-    can_dig?: (pos: Vector3D, player: PlayerObject) => void;
-    after_dig_node?: (pos: Vector3D, oldnode: Node, old_meta: MetaDataRef, digger: ObjectRef) => void;
-    on_rightclick?: (pos: Vector3D, node: Node, player: PlayerObject, stack: ItemStack, pointed: PointedThing) => void;
+    after_place_node?: (this: void, pos: Vector3D, placer: ObjectRef, item: ItemStack, pointedthing: PointedThing) => void;
+    can_dig?: (this: void, pos: Vector3D, player: PlayerObject) => void;
+    after_dig_node?: (this: void, pos: Vector3D, oldnode: Node, old_meta: MetaDataRef, digger: ObjectRef) => void;
+    on_rightclick?: (this: void, pos: Vector3D, node: Node, player: PlayerObject, stack: ItemStack, pointed: PointedThing) => void;
 
-    on_blast?: (pos: Vector3D, intensity?: number) => void;
+    on_blast?: (this: void, pos: Vector3D, intensity?: number) => void;
   }
 
   export interface Node {
