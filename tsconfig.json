@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["es2016"],
+    "types": ["typescript-to-lua/language-extensions"],
     "target": "es6",
     "inlineSourceMap": true,
     "isolatedModules": false,
